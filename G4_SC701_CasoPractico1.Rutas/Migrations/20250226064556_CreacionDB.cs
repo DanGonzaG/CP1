@@ -5,7 +5,7 @@
 namespace G4_SC701_CasoPractico1.Rutas.Migrations
 {
     /// <inheritdoc />
-    public partial class ContraintUsuarioRol : Migration
+    public partial class CreacionDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,18 +32,19 @@ namespace G4_SC701_CasoPractico1.Rutas.Migrations
                     Usuario = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     NombreCompleto = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     CorreoElectronico = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Telefono = table.Column<int>(type: "int", nullable: false),
+                    Telefono = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Contraseña = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RolId = table.Column<int>(type: "int", nullable: true)
+                    RolId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Usuarios", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Usuarios_Roles_RolId",
+                        name: "FK_Usuario_Rol",
                         column: x => x.RolId,
                         principalTable: "Roles",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

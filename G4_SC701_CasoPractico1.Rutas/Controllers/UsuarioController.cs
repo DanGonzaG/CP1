@@ -47,7 +47,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
         // GET: Usuario/Create
         public IActionResult Create()
         {
-            ViewData["Id"] = new SelectList(_context.Roles, "Id", "Nombre");
+            ViewData["RolId"] = new SelectList(_context.Roles, "Id", "Nombre");
             return View();
         }
 
@@ -56,7 +56,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,NombreUsuario,NombreCompleto,CorreoElectronico,Telefono,Contraseña")] Usuario usuario)
+        public async Task<IActionResult> Create([Bind("Id,NombreUsuario,NombreCompleto,CorreoElectronico,Telefono,Contraseña,RolId")] Usuario usuario)
         {
             if (ModelState.IsValid)
             {
@@ -64,7 +64,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Id"] = new SelectList(_context.Roles, "Id", "Nombre", usuario.Id);
+            ViewData["RolId"] = new SelectList(_context.Roles, "Id", "Nombre", usuario.RolId);
             return View(usuario);
         }
 
@@ -81,7 +81,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
             {
                 return NotFound();
             }
-            ViewData["Id"] = new SelectList(_context.Roles, "Id", "Nombre", usuario.Id);
+            ViewData["RolId"] = new SelectList(_context.Roles, "Id", "Nombre", usuario.RolId);
             return View(usuario);
         }
 
@@ -90,7 +90,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,NombreUsuario,NombreCompleto,CorreoElectronico,Telefono,Contraseña")] Usuario usuario)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,NombreUsuario,NombreCompleto,CorreoElectronico,Telefono,Contraseña,RolId")] Usuario usuario)
         {
             if (id != usuario.Id)
             {
@@ -117,7 +117,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Id"] = new SelectList(_context.Roles, "Id", "Nombre", usuario.Id);
+            ViewData["RolId"] = new SelectList(_context.Roles, "Id", "Nombre", usuario.RolId);
             return View(usuario);
         }
 

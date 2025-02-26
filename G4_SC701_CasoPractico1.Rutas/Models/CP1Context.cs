@@ -30,11 +30,11 @@ namespace G4_SC701_CasoPractico1.Rutas.Models
 
             });
 
-            modelBuilder.Entity<Usuario>().HasOne<Rol>(u => u.Rol)
-                                          .WithMany(r => r.Usuarios)
-                                          .HasForeignKey(u => u.Id)
-                                          .HasConstraintName("FK_Usuario_Rol")
-                                          .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Rol>().HasMany<Usuario>(r => r.Usuarios)
+                                    .WithOne(u => u.Rol)
+                                    .HasForeignKey(u => u.RolId)
+                                    .HasConstraintName("FK_Usuario_Rol")
+                                    .OnDelete(DeleteBehavior.Cascade);
         }
         
     }
