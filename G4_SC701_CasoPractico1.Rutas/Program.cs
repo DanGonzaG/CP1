@@ -1,7 +1,15 @@
+using G4_SC701_CasoPractico1.Rutas.Models;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<CP1Context>(op =>
+{
+    op.UseSqlServer(builder.Configuration.GetConnectionString("CP1"));
+});
 
 var app = builder.Build();
 
