@@ -1,0 +1,6 @@
+@G4_SC701_CasoPractico1.api_HostAddress = http://localhost:5218
+
+GET {{G4_SC701_CasoPractico1.api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
