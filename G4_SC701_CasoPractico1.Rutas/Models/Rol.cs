@@ -6,5 +6,6 @@
         public string Nombre { get; set; }
 
         public IEnumerable<Usuario>? Usuarios { get; set; }
+
     }
 }
