@@ -1,0 +1,80 @@
+﻿IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
+BEGIN
+    CREATE TABLE [__EFMigrationsHistory] (
+        [MigrationId] nvarchar(150) NOT NULL,
+        [ProductVersion] nvarchar(32) NOT NULL,
+        CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+    );
+END;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+CREATE TABLE [Roles] (
+    [Id] int NOT NULL IDENTITY,
+    [Nombre] nvarchar(50) NOT NULL,
+    CONSTRAINT [PK_Roles] PRIMARY KEY ([Id])
+);
+GO
+
+CREATE TABLE [Usuarios] (
+    [Id] int NOT NULL IDENTITY,
+    [Usuario] nvarchar(50) NOT NULL,
+    [NombreCompleto] nvarchar(100) NOT NULL,
+    [CorreoElectronico] nvarchar(100) NOT NULL,
+    [Telefono] nvarchar(max) NOT NULL,
+    [Contraseña] nvarchar(max) NOT NULL,
+    [RolId] int NOT NULL,
+    CONSTRAINT [PK_Usuarios] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Usuario_Rol] FOREIGN KEY ([RolId]) REFERENCES [Roles] ([Id]) ON DELETE CASCADE
+);
+GO
+
+CREATE INDEX [IX_Usuarios_RolId] ON [Usuarios] ([RolId]);
+GO
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20250226064556_CreacionDB', N'8.0.13');
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+ALTER TABLE [Usuarios] ADD [idVehiculo] int NOT NULL DEFAULT 0;
+GO
+
+CREATE TABLE [Vehiculos] (
+    [Id] int NOT NULL IDENTITY,
+    [Placa] nvarchar(6) NOT NULL,
+    [Modelo] nvarchar(200) NOT NULL,
+    [CapacidadPasajeros] int NOT NULL,
+    [Estado] nvarchar(50) NOT NULL,
+    [FechaRegistro] datetime2 NOT NULL,
+    [idUsuario] int NOT NULL,
+    CONSTRAINT [PK_Vehiculos] PRIMARY KEY ([Id])
+);
+GO
+
+CREATE TABLE [UsuarioVehiculo] (
+    [usuarioId] int NOT NULL,
+    [vehiculoId] int NOT NULL,
+    CONSTRAINT [PK_UsuarioVehiculo] PRIMARY KEY ([usuarioId], [vehiculoId]),
+    CONSTRAINT [FK_UsuarioVehiculo_Usuarios_usuarioId] FOREIGN KEY ([usuarioId]) REFERENCES [Usuarios] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_UsuarioVehiculo_Vehiculos_vehiculoId] FOREIGN KEY ([vehiculoId]) REFERENCES [Vehiculos] ([Id]) ON DELETE CASCADE
+);
+GO
+
+CREATE INDEX [IX_UsuarioVehiculo_vehiculoId] ON [UsuarioVehiculo] ([vehiculoId]);
+GO
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20250227140710_DanielMigracion1', N'8.0.13');
+GO
+
+COMMIT;
+GO
+
