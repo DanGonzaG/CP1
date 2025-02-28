@@ -9,7 +9,9 @@ namespace G4_SC701_CasoPractico1.Rutas.Models
         
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Rol> Roles { get; set; }
+
         public DbSet<Vehiculo> Vehiculos { get; set; }
+
 
 
 
@@ -36,6 +38,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Models
                                     .HasConstraintName("FK_Usuario_Rol")
                                     .OnDelete(DeleteBehavior.Cascade);
 
+
             modelBuilder.Entity<Vehiculo>(Vehiculo =>
             {
                 Vehiculo.HasKey(u => u.Id);
@@ -52,3 +55,6 @@ namespace G4_SC701_CasoPractico1.Rutas.Models
         
     }
 }
+
+
+    
