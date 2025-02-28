@@ -24,5 +24,12 @@ namespace G4_SC701_CasoPractico1.Rutas.Models
         [DisplayName("Rol")]
         public int RolId { get; set; }
         public Rol? Rol { get; set; }
+
+
+        public Vehiculo? vehiculo { get; set; }
+
+        public int idVehiculo { get; set; }
+
+
     }
 }

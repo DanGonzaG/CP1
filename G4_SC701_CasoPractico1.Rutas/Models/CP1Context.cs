@@ -10,6 +10,8 @@ namespace G4_SC701_CasoPractico1.Rutas.Models
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Rol> Roles { get; set; }
 
+        public DbSet<Vehiculo> Vehiculos { get; set; }
+
 
 
 
@@ -35,6 +37,20 @@ namespace G4_SC701_CasoPractico1.Rutas.Models
                                     .HasForeignKey(u => u.RolId)
                                     .HasConstraintName("FK_Usuario_Rol")
                                     .OnDelete(DeleteBehavior.Cascade);
+
+
+            modelBuilder.Entity<Vehiculo>(Vehiculo =>
+            {
+                Vehiculo.HasKey(u => u.Id);
+                Vehiculo.Property(n => n.Placa).IsRequired().HasMaxLength(6);
+                Vehiculo.Property(m => m.Modelo).HasMaxLength(200).IsRequired();
+                Vehiculo.Property(c => c.CapacidadPasajeros).IsRequired();
+                Vehiculo.Property(e => e.Estado).IsRequired().HasMaxLength(50);
+                
+            });
+            modelBuilder.Entity<Vehiculo>().HasMany<Usuario>(ve => ve.usuario).WithOne(user => user.vehiculo).HasForeignKey(v => v.idVehiculo);
+           
+
         }
         
     }
