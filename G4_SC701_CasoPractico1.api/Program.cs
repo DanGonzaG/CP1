@@ -1,9 +1,20 @@
+using G4_SC701_CasoPractico1.api.Context;
+using G4_SC701_CasoPractico1.Rutas.Models;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+#region Servicios BD grupo
+builder.Services.AddDbContext<Context>(op => op.UseSqlServer(builder.Configuration.GetConnectionString("ContextDaniel")));
+//Mija
+//Jose
+//Andy
+#endregion 
 
 var app = builder.Build();
 
@@ -15,30 +26,30 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-var summaries = new[]
+#region API_rutas
+app.MapGet("/api/routes", async (Context context) =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+    List<Vehiculo> ListaRutas = await context.Rutas.ToListAsync();
+    if (ListaRutas.Count > 0)
+    {
+        return Results.Ok(ListaRutas);
+    }
+    return Results.NoContent();
+});
 
-app.MapGet("/weatherforecast", () =>
+app.MapGet("/api/routes/{id}", async (Context context, int id) =>
 {
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+    var detallesRuta = await context.Rutas.FindAsync(id);
+    if (detallesRuta != null) 
+        return Results.Ok(detallesRuta);
+    else
+    {
+        return Results.NotFound("Ruta no encontrada");
+    }
+});
+#endregion
+
 
 app.Run();
 
-internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+
