@@ -6,9 +6,6 @@ namespace G4_SC701_CasoPractico1.Rutas.Models
     {
         public CP1Context(DbContextOptions<CP1Context> options) : base(options){ }
 
-<<<<<<< Updated upstream
-        //DBsets
-=======
         
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Rol> Roles { get; set; }
@@ -52,7 +49,6 @@ namespace G4_SC701_CasoPractico1.Rutas.Models
            
 
         }
->>>>>>> Stashed changes
         
     }
 }

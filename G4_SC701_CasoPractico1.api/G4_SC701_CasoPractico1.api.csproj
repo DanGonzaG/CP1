@@ -20,4 +20,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\G4_SC701_CasoPractico1.Rutas\G4_SC701_CasoPractico1.Rutas.csproj" />
+  </ItemGroup>
+
 </Project>
