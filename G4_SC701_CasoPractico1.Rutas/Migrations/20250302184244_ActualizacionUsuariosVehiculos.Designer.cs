@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace G4_SC701_CasoPractico1.Rutas.Migrations
 {
     [DbContext(typeof(CP1Context))]
-    [Migration("20250302161656_ActualizacionUsuariosVehiculos")]
+    [Migration("20250302184244_ActualizacionUsuariosVehiculos")]
     partial class ActualizacionUsuariosVehiculos
     {
         /// <inheritdoc />
@@ -146,7 +146,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Migrations
                         .HasForeignKey("idUsuario")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("FK_Vehiculo_usuario");
+                        .HasConstraintName("FK_Usuario_Vehiculo");
 
                     b.Navigation("usuario");
                 });

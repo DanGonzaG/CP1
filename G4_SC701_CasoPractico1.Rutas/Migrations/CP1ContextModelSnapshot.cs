@@ -143,7 +143,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Migrations
                         .HasForeignKey("idUsuario")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("FK_Vehiculo_usuario");
+                        .HasConstraintName("FK_Usuario_Vehiculo");
 
                     b.Navigation("usuario");
                 });
