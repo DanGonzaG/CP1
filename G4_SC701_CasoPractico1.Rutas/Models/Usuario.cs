@@ -26,8 +26,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Models
         public int? RolId { get; set; }
         public Rol? Rol { get; set; }
 
-        [ForeignKey("idVehiculo")]
-        public Vehiculo? Vehiculo { get; set; }
+        public ICollection<Vehiculo>? Vehiculos { get; set; }
 
         public int? idVehiculo { get; set; }
 

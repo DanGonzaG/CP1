@@ -32,6 +32,6 @@ namespace G4_SC701_CasoPractico1.Rutas.Models
         public int idUsuario { get; set; }
 
         //join
-        public Usuario? usuario { get; set; }
+        public Usuario usuario { get; set; }
     }
 }
