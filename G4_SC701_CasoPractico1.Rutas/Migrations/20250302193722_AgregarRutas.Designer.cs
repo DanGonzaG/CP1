@@ -4,6 +4,7 @@ using G4_SC701_CasoPractico1.Rutas.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace G4_SC701_CasoPractico1.Rutas.Migrations
 {
     [DbContext(typeof(CP1Context))]
-    partial class CP1ContextModelSnapshot : ModelSnapshot
+    [Migration("20250302193722_AgregarRutas")]
+    partial class AgregarRutas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,12 +79,11 @@ namespace G4_SC701_CasoPractico1.Rutas.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<int>("UsuarioRegistroId")
-                        .HasColumnType("int");
+                    b.Property<string>("UsuarioRegistro")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UsuarioRegistroId");
 
                     b.ToTable("Rutas");
                 });
@@ -171,18 +173,6 @@ namespace G4_SC701_CasoPractico1.Rutas.Migrations
                     b.ToTable("Vehiculos");
                 });
 
-            modelBuilder.Entity("G4_SC701_CasoPractico1.Rutas.Models.Ruta", b =>
-                {
-                    b.HasOne("G4_SC701_CasoPractico1.Rutas.Models.Usuario", "UsuarioRegistro")
-                        .WithMany("RutasRegistradas")
-                        .HasForeignKey("UsuarioRegistroId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_Ruta_UsuarioRegistro");
-
-                    b.Navigation("UsuarioRegistro");
-                });
-
             modelBuilder.Entity("G4_SC701_CasoPractico1.Rutas.Models.Usuario", b =>
                 {
                     b.HasOne("G4_SC701_CasoPractico1.Rutas.Models.Rol", "Rol")
@@ -199,7 +189,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Migrations
                     b.HasOne("G4_SC701_CasoPractico1.Rutas.Models.Usuario", "usuario")
                         .WithMany("Vehiculos")
                         .HasForeignKey("idUsuario")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_Usuario_Vehiculo");
 
@@ -213,8 +203,6 @@ namespace G4_SC701_CasoPractico1.Rutas.Migrations
 
             modelBuilder.Entity("G4_SC701_CasoPractico1.Rutas.Models.Usuario", b =>
                 {
-                    b.Navigation("RutasRegistradas");
-
                     b.Navigation("Vehiculos");
                 });
 #pragma warning restore 612, 618

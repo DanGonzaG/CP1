@@ -1,0 +1,60 @@
+﻿@model G4_SC701_CasoPractico1.Rutas.Models.Ruta
+
+@{
+    ViewData["Title"] = "Editar Ruta";
+}
+
+<h2>Editar Ruta</h2>
+
+<form asp-action="Edit">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label asp-for="Codigo" class="control-label"></label>
+        <input asp-for="Codigo" class="form-control" />
+        <span asp-validation-for="Codigo" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Nombre" class="control-label"></label>
+        <input asp-for="Nombre" class="form-control" />
+        <span asp-validation-for="Nombre" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Descripcion" class="control-label"></label>
+        <textarea asp-for="Descripcion" class="form-control"></textarea>
+        <span asp-validation-for="Descripcion" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Paradas" class="control-label"></label>
+        <input asp-for="Paradas" class="form-control" />
+        <span asp-validation-for="Paradas" class="text-danger"></span>
+        <small>Ingrese las paradas separadas por comas.</small>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Horarios" class="control-label"></label>
+        <input asp-for="Horarios" class="form-control" />
+        <span asp-validation-for="Horarios" class="text-danger"></span>
+        <small>Ingrese los horarios separados por comas (ej: 08:00,09:00).</small>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Estado" class="control-label"></label>
+        <select asp-for="Estado" class="form-control" asp-items="Html.GetEnumSelectList<G4_SC701_CasoPractico1.Rutas.Models.EstadoRuta>()"></select>
+        <span asp-validation-for="Estado" class="text-danger"></span>
+    </div>
+
+    <!-- Los campos FechaRegistro y UsuarioRegistro se mantienen inalterados -->
+
+    <div class="form-group">
+        <input type="submit" value="Guardar" class="btn btn-primary" />
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Volver al listado</a>
+</div>

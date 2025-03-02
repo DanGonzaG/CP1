@@ -1,0 +1,37 @@
+﻿@model IEnumerable<G4_SC701_CasoPractico1.Rutas.Models.Ruta>
+
+@{
+    ViewData["Title"] = "Listado de Rutas";
+}
+
+<h2>Listado de Rutas</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Crear Nueva Ruta</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.First().Nombre)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Estado)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Horarios)</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ruta in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => ruta.Nombre)</td>
+                <td>@Html.DisplayFor(modelItem => ruta.Estado)</td>
+                <td>@Html.DisplayFor(modelItem => ruta.Horarios)</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@ruta.Id">Detalles</a> |
+                    <a asp-action="Edit" asp-route-id="@ruta.Id">Editar</a> |
+                    <a asp-action="Delete" asp-route-id="@ruta.Id">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
