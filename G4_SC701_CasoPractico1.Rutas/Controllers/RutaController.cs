@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,24 +9,23 @@ using G4_SC701_CasoPractico1.Rutas.Models;
 
 namespace G4_SC701_CasoPractico1.Rutas.Controllers
 {
-    public class VehiculosController : Controller
+    public class RutaController : Controller
     {
         private readonly CP1Context _context;
 
-        public VehiculosController(CP1Context context)
+        public RutaController(CP1Context context)
         {
             _context = context;
         }
 
-        // GET: Vehiculos
+        // GET: Ruta
         public async Task<IActionResult> Index()
         {
-            var vehiculos = await _context.Vehiculos.Include(v => v.usuario).ToListAsync();
-            
-            return View(vehiculos);
+            var cP1Context = _context.Rutas.Include(r => r.usuario).Include(r => r.vehiculo);
+            return View(await cP1Context.ToListAsync());
         }
 
-        // GET: Vehiculos/Details/5
+        // GET: Ruta/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,47 +33,45 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
                 return NotFound();
             }
 
-            var vehiculo = await _context.Vehiculos.Include(v => v.usuario)
+            var ruta = await _context.Rutas
+                .Include(r => r.usuario)
+                .Include(r => r.vehiculo)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (vehiculo == null)
+            if (ruta == null)
             {
                 return NotFound();
             }
 
-            return View(vehiculo);
+            return View(ruta);
         }
 
-        // GET: Vehiculos/Create
+        // GET: Ruta/Create
         public IActionResult Create()
         {
+            ViewData["IdUsuarioRegistro"] = new SelectList(_context.Usuarios, "Id", "Contraseña");
+            ViewData["IdVehiculo"] = new SelectList(_context.Vehiculos, "Id", "Estado");
             return View();
         }
 
-        // POST: Vehiculos/Create
+        // POST: Ruta/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Placa,Modelo,CapacidadPasajeros,Estado,idUsuario")] Vehiculo vehiculo)
+        public async Task<IActionResult> Create([Bind("Id,NombreRuta,Estado,FechaRegistro,IdUsuarioRegistro,IdVehiculo")] Ruta ruta)
         {
-            var rol = await _context.Roles.Where(r => r.Nombre == "Administrador").FirstOrDefaultAsync();
-            var usuario = await _context.Usuarios.Where(u => u.Id == vehiculo.idUsuario && u.RolId == rol.Id).FirstOrDefaultAsync();
-            if (usuario == null)
+            if (ModelState.IsValid)
             {
-                ModelState.AddModelError("idUsuario", "El usuario no existe o no tiene permisos de administrador.");
-                return View(vehiculo);
-            }
-            if (!ModelState.IsValid)
-            {
-                vehiculo.FechaRegistro = DateTime.Now;
-                _context.Add(vehiculo);
+                _context.Add(ruta);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(vehiculo);
+            ViewData["IdUsuarioRegistro"] = new SelectList(_context.Usuarios, "Id", "Contraseña", ruta.IdUsuarioRegistro);
+            ViewData["IdVehiculo"] = new SelectList(_context.Vehiculos, "Id", "Estado", ruta.IdVehiculo);
+            return View(ruta);
         }
 
-        // GET: Vehiculos/Edit/5
+        // GET: Ruta/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -82,22 +79,24 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
                 return NotFound();
             }
 
-            var vehiculo = await _context.Vehiculos.Include(v => v.usuario ).FirstOrDefaultAsync(v => v.Id == id);
-            if (vehiculo == null)
+            var ruta = await _context.Rutas.FindAsync(id);
+            if (ruta == null)
             {
                 return NotFound();
             }
-            return View(vehiculo);
+            ViewData["IdUsuarioRegistro"] = new SelectList(_context.Usuarios, "Id", "Contraseña", ruta.IdUsuarioRegistro);
+            ViewData["IdVehiculo"] = new SelectList(_context.Vehiculos, "Id", "Estado", ruta.IdVehiculo);
+            return View(ruta);
         }
 
-        // POST: Vehiculos/Edit/5
+        // POST: Ruta/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Placa,Modelo,CapacidadPasajeros,Estado,FechaRegistro,idUsuario")] Vehiculo vehiculo)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,NombreRuta,Estado,FechaRegistro,IdUsuarioRegistro,IdVehiculo")] Ruta ruta)
         {
-            if (id != vehiculo.Id)
+            if (id != ruta.Id)
             {
                 return NotFound();
             }
@@ -106,12 +105,12 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
             {
                 try
                 {
-                    _context.Update(vehiculo);
+                    _context.Update(ruta);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!VehiculoExists(vehiculo.Id))
+                    if (!RutaExists(ruta.Id))
                     {
                         return NotFound();
                     }
@@ -122,10 +121,12 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(vehiculo);
+            ViewData["IdUsuarioRegistro"] = new SelectList(_context.Usuarios, "Id", "Contraseña", ruta.IdUsuarioRegistro);
+            ViewData["IdVehiculo"] = new SelectList(_context.Vehiculos, "Id", "Estado", ruta.IdVehiculo);
+            return View(ruta);
         }
 
-        // GET: Vehiculos/Delete/5
+        // GET: Ruta/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -133,34 +134,36 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
                 return NotFound();
             }
 
-            var vehiculo = await _context.Vehiculos.Include(v => v.usuario)
+            var ruta = await _context.Rutas
+                .Include(r => r.usuario)
+                .Include(r => r.vehiculo)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (vehiculo == null)
+            if (ruta == null)
             {
                 return NotFound();
             }
 
-            return View(vehiculo);
+            return View(ruta);
         }
 
-        // POST: Vehiculos/Delete/5
+        // POST: Ruta/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var vehiculo = await _context.Vehiculos.FindAsync(id);
-            if (vehiculo != null)
+            var ruta = await _context.Rutas.FindAsync(id);
+            if (ruta != null)
             {
-                _context.Vehiculos.Remove(vehiculo);
+                _context.Rutas.Remove(ruta);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool VehiculoExists(int id)
+        private bool RutaExists(int id)
         {
-            return _context.Vehiculos.Any(e => e.Id == id);
+            return _context.Rutas.Any(e => e.Id == id);
         }
     }
 }

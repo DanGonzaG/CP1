@@ -152,6 +152,5 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
         {
             return _context.Roles.Any(e => e.Id == id);
         }
-
     }
 }

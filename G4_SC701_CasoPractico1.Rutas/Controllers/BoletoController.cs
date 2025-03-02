@@ -9,23 +9,23 @@ using G4_SC701_CasoPractico1.Rutas.Models;
 
 namespace G4_SC701_CasoPractico1.Rutas.Controllers
 {
-    public class UsuarioController : Controller
+    public class BoletoController : Controller
     {
         private readonly CP1Context _context;
 
-        public UsuarioController(CP1Context context)
+        public BoletoController(CP1Context context)
         {
             _context = context;
         }
 
-        // GET: Usuario
+        // GET: Boleto
         public async Task<IActionResult> Index()
         {
-            var cP1Context = _context.Usuarios.Include(u => u.Rol);
+            var cP1Context = _context.Boletos.Include(b => b.ruta).Include(b => b.usuario);
             return View(await cP1Context.ToListAsync());
         }
 
-        // GET: Usuario/Details/5
+        // GET: Boleto/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,42 +33,45 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
                 return NotFound();
             }
 
-            var usuario = await _context.Usuarios
-                .Include(u => u.Rol)
+            var boleto = await _context.Boletos
+                .Include(b => b.ruta)
+                .Include(b => b.usuario)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (usuario == null)
+            if (boleto == null)
             {
                 return NotFound();
             }
 
-            return View(usuario);
+            return View(boleto);
         }
 
-        // GET: Usuario/Create
+        // GET: Boleto/Create
         public IActionResult Create()
         {
-            ViewData["RolId"] = new SelectList(_context.Roles, "Id", "Nombre");
+            ViewData["IdRuta"] = new SelectList(_context.Rutas, "Id", "Id");
+            ViewData["IdUsuario"] = new SelectList(_context.Usuarios, "Id", "Contraseña");
             return View();
         }
 
-        // POST: Usuario/Create
+        // POST: Boleto/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,NombreUsuario,NombreCompleto,CorreoElectronico,Telefono,Contraseña,RolId,idVehiculo")] Usuario usuario)
+        public async Task<IActionResult> Create([Bind("Id,IdRuta,IdUsuario,FechaCompra")] Boleto boleto)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(usuario);
+                _context.Add(boleto);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RolId"] = new SelectList(_context.Roles, "Id", "Nombre", usuario.RolId);
-            return View(usuario);
+            ViewData["IdRuta"] = new SelectList(_context.Rutas, "Id", "Id", boleto.IdRuta);
+            ViewData["IdUsuario"] = new SelectList(_context.Usuarios, "Id", "Contraseña", boleto.IdUsuario);
+            return View(boleto);
         }
 
-        // GET: Usuario/Edit/5
+        // GET: Boleto/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -76,23 +79,24 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
                 return NotFound();
             }
 
-            var usuario = await _context.Usuarios.FindAsync(id);
-            if (usuario == null)
+            var boleto = await _context.Boletos.FindAsync(id);
+            if (boleto == null)
             {
                 return NotFound();
             }
-            ViewData["RolId"] = new SelectList(_context.Roles, "Id", "Nombre", usuario.RolId);
-            return View(usuario);
+            ViewData["IdRuta"] = new SelectList(_context.Rutas, "Id", "Id", boleto.IdRuta);
+            ViewData["IdUsuario"] = new SelectList(_context.Usuarios, "Id", "Contraseña", boleto.IdUsuario);
+            return View(boleto);
         }
 
-        // POST: Usuario/Edit/5
+        // POST: Boleto/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,NombreUsuario,NombreCompleto,CorreoElectronico,Telefono,Contraseña,RolId,idVehiculo")] Usuario usuario)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,IdRuta,IdUsuario,FechaCompra")] Boleto boleto)
         {
-            if (id != usuario.Id)
+            if (id != boleto.Id)
             {
                 return NotFound();
             }
@@ -101,12 +105,12 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
             {
                 try
                 {
-                    _context.Update(usuario);
+                    _context.Update(boleto);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UsuarioExists(usuario.Id))
+                    if (!BoletoExists(boleto.Id))
                     {
                         return NotFound();
                     }
@@ -117,11 +121,12 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RolId"] = new SelectList(_context.Roles, "Id", "Nombre", usuario.RolId);
-            return View(usuario);
+            ViewData["IdRuta"] = new SelectList(_context.Rutas, "Id", "Id", boleto.IdRuta);
+            ViewData["IdUsuario"] = new SelectList(_context.Usuarios, "Id", "Contraseña", boleto.IdUsuario);
+            return View(boleto);
         }
 
-        // GET: Usuario/Delete/5
+        // GET: Boleto/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -129,35 +134,36 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
                 return NotFound();
             }
 
-            var usuario = await _context.Usuarios
-                .Include(u => u.Rol)
+            var boleto = await _context.Boletos
+                .Include(b => b.ruta)
+                .Include(b => b.usuario)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (usuario == null)
+            if (boleto == null)
             {
                 return NotFound();
             }
 
-            return View(usuario);
+            return View(boleto);
         }
 
-        // POST: Usuario/Delete/5
+        // POST: Boleto/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var usuario = await _context.Usuarios.FindAsync(id);
-            if (usuario != null)
+            var boleto = await _context.Boletos.FindAsync(id);
+            if (boleto != null)
             {
-                _context.Usuarios.Remove(usuario);
+                _context.Boletos.Remove(boleto);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool UsuarioExists(int id)
+        private bool BoletoExists(int id)
         {
-            return _context.Usuarios.Any(e => e.Id == id);
+            return _context.Boletos.Any(e => e.Id == id);
         }
     }
 }
