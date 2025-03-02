@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol.Core.Types;
 
 namespace G4_SC701_CasoPractico1.Rutas.Models
 {
@@ -11,9 +12,6 @@ namespace G4_SC701_CasoPractico1.Rutas.Models
         public DbSet<Rol> Roles { get; set; }
 
         public DbSet<Vehiculo> Vehiculos { get; set; }
-
-
-
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -48,11 +46,17 @@ namespace G4_SC701_CasoPractico1.Rutas.Models
                 Vehiculo.Property(e => e.Estado).IsRequired().HasMaxLength(50);
                 
             });
-            modelBuilder.Entity<Vehiculo>().HasMany<Usuario>(ve => ve.usuario).WithOne(user => user.vehiculo).HasForeignKey(v => v.idVehiculo);
-           
+
+
+
+            modelBuilder.Entity<Usuario>()
+                        .HasMany(u => u.Vehiculos)
+                        .WithOne(v => v.usuario)
+                        .HasForeignKey(v => v.idUsuario)
+                        .HasConstraintName("FK_Usuario_Vehiculo");
 
         }
-        
+
     }
 }
 
