@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace G4_SC701_CasoPractico1.Rutas.Migrations
 {
     [DbContext(typeof(CP1Context))]
-    [Migration("20250302154108_prueba")]
-    partial class prueba
+    [Migration("20250302161656_ActualizacionUsuariosVehiculos")]
+    partial class ActualizacionUsuariosVehiculos
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

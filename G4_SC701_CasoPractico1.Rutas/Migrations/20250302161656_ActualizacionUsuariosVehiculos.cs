@@ -5,7 +5,7 @@
 namespace G4_SC701_CasoPractico1.Rutas.Migrations
 {
     /// <inheritdoc />
-    public partial class prueba : Migration
+    public partial class ActualizacionUsuariosVehiculos : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -14,9 +14,6 @@ namespace G4_SC701_CasoPractico1.Rutas.Models
         public DbSet<Vehiculo> Vehiculos { get; set; }
 
 
-
-
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Usuario>(Usuario =>
@@ -50,13 +47,13 @@ namespace G4_SC701_CasoPractico1.Rutas.Models
                 
             });
 
-        
 
-             modelBuilder.Entity<Vehiculo>().HasOne(v => v.usuario)
-              .WithMany(u => u.Vehiculos)
-              .HasForeignKey(v => v.idUsuario)
-              .HasConstraintName("FK_Vehiculo_usuario");
 
+            modelBuilder.Entity<Usuario>()
+                        .HasMany(u => u.Vehiculos)
+                        .WithOne(v => v.usuario)
+                        .HasForeignKey(v => v.idUsuario)
+                        .HasConstraintName("FK_Usuario_Vehiculo");
 
         }
 
