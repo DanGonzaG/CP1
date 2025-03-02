@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace G4_SC701_CasoPractico1.Rutas.Migrations
 {
     [DbContext(typeof(CP1Context))]
-    [Migration("20250302141119_ActualizacionEntreVehiculoUsuario")]
+    [Migration("20250302151308_ActualizacionEntreVehiculoUsuario")]
     partial class ActualizacionEntreVehiculoUsuario
     {
         /// <inheritdoc />
@@ -121,10 +121,12 @@ namespace G4_SC701_CasoPractico1.Rutas.Migrations
                     b.Property<int>("idUsuario")
                         .HasColumnType("int");
 
+                    b.Property<int>("idVehiculo")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("idUsuario")
-                        .IsUnique();
+                    b.HasIndex("idUsuario");
 
                     b.ToTable("Vehiculos");
                 });
@@ -143,11 +145,11 @@ namespace G4_SC701_CasoPractico1.Rutas.Migrations
             modelBuilder.Entity("G4_SC701_CasoPractico1.Rutas.Models.Vehiculo", b =>
                 {
                     b.HasOne("G4_SC701_CasoPractico1.Rutas.Models.Usuario", "usuario")
-                        .WithOne("Vehiculo")
-                        .HasForeignKey("G4_SC701_CasoPractico1.Rutas.Models.Vehiculo", "idUsuario")
+                        .WithMany("Vehiculos")
+                        .HasForeignKey("idUsuario")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("FK_Usuario_Vehiculo");
+                        .HasConstraintName("FK_Vehiculo_usuario");
 
                     b.Navigation("usuario");
                 });
@@ -159,7 +161,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Migrations
 
             modelBuilder.Entity("G4_SC701_CasoPractico1.Rutas.Models.Usuario", b =>
                 {
-                    b.Navigation("Vehiculo");
+                    b.Navigation("Vehiculos");
                 });
 #pragma warning restore 612, 618
         }
