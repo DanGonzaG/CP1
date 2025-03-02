@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace G4_SC701_CasoPractico1.Rutas.Migrations
 {
     [DbContext(typeof(CP1Context))]
-    [Migration("20250302151308_ActualizacionEntreVehiculoUsuario")]
-    partial class ActualizacionEntreVehiculoUsuario
+    [Migration("20250302154108_prueba")]
+    partial class prueba
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -119,9 +119,6 @@ namespace G4_SC701_CasoPractico1.Rutas.Migrations
                         .HasColumnType("nvarchar(6)");
 
                     b.Property<int>("idUsuario")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idVehiculo")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

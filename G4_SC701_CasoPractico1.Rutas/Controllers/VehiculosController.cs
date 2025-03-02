@@ -64,7 +64,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
                 ModelState.AddModelError("idUsuario", "El usuario no existe o no tiene permisos de administrador.");
                 return View(vehiculo);
             }
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 vehiculo.FechaRegistro = DateTime.Now;
                 _context.Add(vehiculo);

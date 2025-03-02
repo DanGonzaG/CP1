@@ -118,9 +118,6 @@ namespace G4_SC701_CasoPractico1.Rutas.Migrations
                     b.Property<int>("idUsuario")
                         .HasColumnType("int");
 
-                    b.Property<int>("idVehiculo")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("idUsuario");
