@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace G4_SC701_CasoPractico1.Rutas.Models
 {
@@ -22,13 +23,13 @@ namespace G4_SC701_CasoPractico1.Rutas.Models
         [DataType(DataType.Password)]
         public string Contraseña { get; set; }
         [DisplayName("Rol")]
-        public int RolId { get; set; }
+        public int? RolId { get; set; }
         public Rol? Rol { get; set; }
 
+        [ForeignKey("idVehiculo")]
+        public Vehiculo? Vehiculo { get; set; }
 
-        public Vehiculo? vehiculo { get; set; }
-
-        public int idVehiculo { get; set; }
+        public int? idVehiculo { get; set; }
 
 
     }

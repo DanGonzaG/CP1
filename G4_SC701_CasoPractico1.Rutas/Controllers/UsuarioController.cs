@@ -58,6 +58,8 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,NombreUsuario,NombreCompleto,CorreoElectronico,Telefono,Contraseña,RolId")] Usuario usuario)
         {
+            
+
             if (ModelState.IsValid)
             {
                 _context.Add(usuario);

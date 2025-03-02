@@ -21,7 +21,9 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
         // GET: Vehiculos
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Vehiculos.ToListAsync());
+            var vehiculos = await _context.Vehiculos.Include(v => v.usuario).ToListAsync();
+            
+            return View(vehiculos);
         }
 
         // GET: Vehiculos/Details/5
@@ -32,7 +34,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
                 return NotFound();
             }
 
-            var vehiculo = await _context.Vehiculos
+            var vehiculo = await _context.Vehiculos.Include(v => v.usuario)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (vehiculo == null)
             {
@@ -53,10 +55,18 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Placa,Modelo,CapacidadPasajeros,Estado,FechaRegistro,idUsuario")] Vehiculo vehiculo)
+        public async Task<IActionResult> Create([Bind("Id,Placa,Modelo,CapacidadPasajeros,Estado,idUsuario")] Vehiculo vehiculo)
         {
+            var rol = await _context.Roles.Where(r => r.Nombre == "Administrador").FirstOrDefaultAsync();
+            var usuario = await _context.Usuarios.Where(u => u.Id == vehiculo.idUsuario && u.RolId == rol.Id).FirstOrDefaultAsync();
+            if (usuario == null)
+            {
+                ModelState.AddModelError("idUsuario", "El usuario no existe o no tiene permisos de administrador.");
+                return View(vehiculo);
+            }
             if (ModelState.IsValid)
             {
+                vehiculo.FechaRegistro = DateTime.Now;
                 _context.Add(vehiculo);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -72,7 +82,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
                 return NotFound();
             }
 
-            var vehiculo = await _context.Vehiculos.FindAsync(id);
+            var vehiculo = await _context.Vehiculos.Include(v => v.usuario ).FirstOrDefaultAsync(v => v.Id == id);
             if (vehiculo == null)
             {
                 return NotFound();
@@ -123,7 +133,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
                 return NotFound();
             }
 
-            var vehiculo = await _context.Vehiculos
+            var vehiculo = await _context.Vehiculos.Include(v => v.usuario)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (vehiculo == null)
             {

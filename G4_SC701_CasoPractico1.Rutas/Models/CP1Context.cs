@@ -48,7 +48,11 @@ namespace G4_SC701_CasoPractico1.Rutas.Models
                 Vehiculo.Property(e => e.Estado).IsRequired().HasMaxLength(50);
                 
             });
-            modelBuilder.Entity<Vehiculo>().HasMany<Usuario>(ve => ve.usuario).WithOne(user => user.vehiculo).HasForeignKey(v => v.idVehiculo);
+
+            modelBuilder.Entity<Vehiculo>().HasOne<Usuario>(ve => ve.usuario)
+                                           .WithOne(user => user.Vehiculo)
+                                           .HasForeignKey<Vehiculo>(v => v.idUsuario)
+                                           .HasConstraintName("FK_Usuario_Vehiculo");
            
 
         }
