@@ -24,14 +24,14 @@ namespace G4_SC701_CasoPractico1.Rutas.Models
         [MaxLength(50)]
         public string Estado { get; set; }
 
-
-        public DateTime FechaRegistro { get; set; }
+        
+        public DateTime FechaRegistro { get; set; } = DateTime.Now;
 
         [Required]
         [DisplayName("Nombre de usuario")]
         public int idUsuario { get; set; }
 
         //join
-        public IEnumerable<Usuario>? usuario { get; set; }
+        public Usuario? usuario { get; set; }
     }
 }
