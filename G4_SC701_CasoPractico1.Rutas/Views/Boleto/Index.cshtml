@@ -1,7 +1,7 @@
-@model IEnumerable<G4_SC701_CasoPractico1.Rutas.Models.Rol>
+@model IEnumerable<G4_SC701_CasoPractico1.Rutas.Models.Boleto>
 
 @{
-    
+
 }
 
 <!DOCTYPE html>
@@ -19,7 +19,13 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Nombre)
+                @Html.DisplayNameFor(model => model.FechaCompra)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ruta)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.usuario)
             </th>
             <th></th>
         </tr>
@@ -28,7 +34,13 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
+                @Html.DisplayFor(modelItem => item.FechaCompra)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ruta.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.usuario.Contraseña)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
