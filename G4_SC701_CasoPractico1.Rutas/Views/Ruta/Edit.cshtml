@@ -1,7 +1,7 @@
 @model G4_SC701_CasoPractico1.Rutas.Models.Ruta
 
 @{
-    
+  
 }
 
 <!DOCTYPE html>
@@ -9,7 +9,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Editar</title>
+    <title>Edit</title>
 </head>
 <body>
 
@@ -25,11 +25,11 @@
                 <input asp-for="NombreRuta" class="form-control" />
                 <span asp-validation-for="NombreRuta" class="text-danger"></span>
             </div>
-                <div class="form-group">
-                    <label asp-for="Descripcion" class="control-label"></label>
-                    <input asp-for="Descripcion" class="form-control" />
-                    <span asp-validation-for="Descripcion" class="text-danger"></span>
-                </div>
+            <div class="form-group">
+                <label asp-for="Descripcion" class="control-label"></label>
+                <input asp-for="Descripcion" class="form-control" />
+                <span asp-validation-for="Descripcion" class="text-danger"></span>
+            </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="Estado" /> @Html.DisplayNameFor(model => model.Estado)
@@ -40,15 +40,11 @@
                     <input asp-for="FechaRegistro" class="form-control" readonly />
                 <span asp-validation-for="FechaRegistro" class="text-danger"></span>
             </div>
-              
- 
-
                 <div class="form-group">
                     <label class="control-label">Usuario</label>
                     <input class="form-control" value="@ViewData["Usuario"]" readonly />
                     <input type="hidden" asp-for="IdUsuarioRegistro" />
                 </div>
-            
             <div class="form-group">
                 <input type="submit" value="Guardar" class="btn btn-primary" />
             </div>

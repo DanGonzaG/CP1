@@ -1,7 +1,7 @@
 @model G4_SC701_CasoPractico1.Rutas.Models.Ruta
 
 @{
-  
+   
 }
 
 <!DOCTYPE html>
@@ -9,9 +9,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>
-        Eliminar
-    </title>
+    <title>Delete</title>
 </head>
 <body>
 
@@ -27,6 +25,12 @@
             @Html.DisplayFor(model => model.NombreRuta)
         </dd>
         <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Estado)
         </dt>
         <dd class = "col-sm-10">
@@ -38,7 +42,6 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.FechaRegistro)
         </dd>
-        
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.usuario)
         </dt>
@@ -50,7 +53,7 @@
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Eliminar" class="btn btn-danger" /> |
-        <a asp-action="Index">Volver a la lista</a>
+        <a asp-action="Index">volver a la lista</a>
     </form>
 </div>
 </body>

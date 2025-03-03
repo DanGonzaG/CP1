@@ -11,6 +11,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Models
         public int Id { get; set; }
         [Required(ErrorMessage = "El espacio es requerido")]
         [DisplayName("Nombre de ruta")]
+        
         public string NombreRuta { get; set; }
         [DisplayName("Ruta")]
         public string Descripcion { get; set; }
