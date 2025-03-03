@@ -18,10 +18,12 @@ namespace G4_SC701_CasoPractico1.Rutas.Models
         [Required]
         [MaxLength(50)]
         public required string Estado { get; set; }
+        [DisplayName("Fecha de registro")]
         public DateTime FechaRegistro { get; set; }
         [Required]
-        [DisplayName("Nombre de usuario")]
+        
         public int idUsuario { get; set; }
-        public required Usuario usuario { get; set; }
+        [DisplayName("Nombre de Usuario")]
+        public required Usuario? usuario { get; set; }
     }
 }

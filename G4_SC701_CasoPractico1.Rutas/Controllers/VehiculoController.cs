@@ -58,13 +58,28 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Placa,Modelo,CapacidadPasajeros,Estado,FechaRegistro,idUsuario")] Vehiculo vehiculo)
         {
+            var date = DateTime.Now;
+
+            // Obtener el usuario basado en idUsuario del vehículo
+            var usuario = await _context.Usuarios
+                                .Include(u => u.Rol)
+                                .Where(u => u.Id == vehiculo.idUsuario)
+                                .Select(u => new { u.Id, u.NombreUsuario, u.RolId, RolNombre = u.Rol.Nombre })
+                                .FirstOrDefaultAsync();
+           
+
+
+            // Verifica si hay errores antes de guardar
             if (ModelState.IsValid)
             {
+                vehiculo.FechaRegistro = date;
                 _context.Add(vehiculo);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["idUsuario"] = new SelectList(_context.Usuarios, "Id", "Contraseña", vehiculo.idUsuario);
+
+            // Recargar la lista de usuarios para la vista
+            ViewData["idUsuario"] = new SelectList(_context.Usuarios, "Id", "NombreUsuario", vehiculo.idUsuario);
             return View(vehiculo);
         }
 
