@@ -34,8 +34,8 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
             }
 
             var vehiculo = await _context.Vehiculos
-                .Include(v => v.usuario)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                            .Include(v => v.usuario) 
+                            .FirstOrDefaultAsync(m => m.Id == id);
             if (vehiculo == null)
             {
                 return NotFound();
@@ -60,7 +60,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
         {
             var date = DateTime.Now;
 
-            // Obtener el usuario basado en idUsuario del vehículo
+            
             var usuario = await _context.Usuarios
                                 .Include(u => u.Rol)
                                 .Where(u => u.Id == vehiculo.idUsuario)
@@ -69,7 +69,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
            
 
 
-            // Verifica si hay errores antes de guardar
+            
             if (ModelState.IsValid)
             {
                 vehiculo.FechaRegistro = date;
@@ -78,7 +78,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // Recargar la lista de usuarios para la vista
+            
             ViewData["idUsuario"] = new SelectList(_context.Usuarios, "Id", "NombreUsuario", vehiculo.idUsuario);
             return View(vehiculo);
         }
@@ -91,12 +91,15 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
                 return NotFound();
             }
 
-            var vehiculo = await _context.Vehiculos.FindAsync(id);
+            var vehiculo = await _context.Vehiculos
+                    .Include(v => v.usuario) 
+                    .FirstOrDefaultAsync(m => m.Id == id);
             if (vehiculo == null)
             {
                 return NotFound();
             }
-            ViewData["idUsuario"] = new SelectList(_context.Usuarios, "Id", "Contraseña", vehiculo.idUsuario);
+            ViewData["Usuario"] = vehiculo.usuario?.NombreUsuario;
+            ViewData["idUsuario"] = new SelectList(_context.Usuarios, "Id", "Usuario", vehiculo.idUsuario);
             return View(vehiculo);
         }
 
@@ -132,7 +135,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["idUsuario"] = new SelectList(_context.Usuarios, "Id", "Contraseña", vehiculo.idUsuario);
+            ViewData["idUsuario"] = new SelectList(_context.Usuarios, "Id", "Usuario", vehiculo.idUsuario);
             return View(vehiculo);
         }
 

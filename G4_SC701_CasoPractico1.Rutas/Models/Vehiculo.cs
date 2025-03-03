@@ -23,7 +23,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Models
         [Required]
         
         public int idUsuario { get; set; }
-        [DisplayName("Nombre de Usuario")]
+        [DisplayName("Nombre usuario de registro")]
         public required Usuario? usuario { get; set; }
     }
 }

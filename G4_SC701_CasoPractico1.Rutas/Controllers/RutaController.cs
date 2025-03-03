@@ -21,7 +21,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
         // GET: Ruta
         public async Task<IActionResult> Index()
         {
-            var cP1Context = _context.Rutas.Include(r => r.usuario).Include(r => r.vehiculo);
+            var cP1Context = _context.Rutas.Include(r => r.usuario);
             return View(await cP1Context.ToListAsync());
         }
 
@@ -34,9 +34,9 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
             }
 
             var ruta = await _context.Rutas
-                .Include(r => r.usuario)
-                .Include(r => r.vehiculo)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                            .Include(v => v.usuario)
+                            .FirstOrDefaultAsync(m => m.Id == id);
+
             if (ruta == null)
             {
                 return NotFound();
@@ -58,7 +58,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,NombreRuta,Estado,FechaRegistro,IdUsuarioRegistro,IdVehiculo")] Ruta ruta)
+        public async Task<IActionResult> Create([Bind("Id,NombreRuta,Descripcion, Estado,FechaRegistro,IdUsuarioRegistro,IdVehiculo")] Ruta ruta)
         {
             if (ModelState.IsValid)
             {
@@ -67,7 +67,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["IdUsuarioRegistro"] = new SelectList(_context.Usuarios, "Id", "Contraseña", ruta.IdUsuarioRegistro);
-            ViewData["IdVehiculo"] = new SelectList(_context.Vehiculos, "Id", "Estado", ruta.IdVehiculo);
+            
             return View(ruta);
         }
 
@@ -79,13 +79,16 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
                 return NotFound();
             }
 
-            var ruta = await _context.Rutas.FindAsync(id);
+            var ruta = await _context.Rutas
+                       .Include(u => u.usuario)
+                       .FirstOrDefaultAsync(m => m.Id == id);
             if (ruta == null)
             {
                 return NotFound();
             }
+            ViewData["Usuario"] = ruta.usuario?.NombreUsuario;
             ViewData["IdUsuarioRegistro"] = new SelectList(_context.Usuarios, "Id", "Contraseña", ruta.IdUsuarioRegistro);
-            ViewData["IdVehiculo"] = new SelectList(_context.Vehiculos, "Id", "Estado", ruta.IdVehiculo);
+            
             return View(ruta);
         }
 
@@ -94,7 +97,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,NombreRuta,Estado,FechaRegistro,IdUsuarioRegistro,IdVehiculo")] Ruta ruta)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,NombreRuta, Descripcion,Estado,FechaRegistro,IdUsuarioRegistro,IdVehiculo")] Ruta ruta)
         {
             if (id != ruta.Id)
             {
@@ -122,7 +125,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["IdUsuarioRegistro"] = new SelectList(_context.Usuarios, "Id", "Contraseña", ruta.IdUsuarioRegistro);
-            ViewData["IdVehiculo"] = new SelectList(_context.Vehiculos, "Id", "Estado", ruta.IdVehiculo);
+            
             return View(ruta);
         }
 
@@ -136,7 +139,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
 
             var ruta = await _context.Rutas
                 .Include(r => r.usuario)
-                .Include(r => r.vehiculo)
+                
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (ruta == null)
             {

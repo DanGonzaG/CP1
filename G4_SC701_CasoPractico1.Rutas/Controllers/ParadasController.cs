@@ -21,6 +21,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
         // GET: Paradas
         public async Task<IActionResult> Index()
         {
+            var cpContext = _context.Parada.Include(r => r.ruta);
             return View(await _context.Parada.ToListAsync());
         }
 
@@ -45,24 +46,39 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
         // GET: Paradas/Create
         public IActionResult Create()
         {
+            ViewBag.Rutas = new SelectList(_context.Rutas, "Id", "NombreRuta"); 
             return View();
         }
+
 
         // POST: Paradas/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Descripcion")] Paradas paradas)
+        public async Task<IActionResult> Create([Bind("Id,Descripcion,IdRuta")] Paradas paradas)
         {
             if (ModelState.IsValid)
             {
+                // Asignar la relación con Ruta
+                paradas.ruta = await _context.Rutas.FindAsync(paradas.IdRuta);
+                if (paradas.ruta == null)
+                {
+                    ModelState.AddModelError("Id", "Ruta no válida.");
+                    ViewBag.Rutas = new SelectList(_context.Rutas, "Id", "NombreRuta", paradas.IdRuta);
+                    return View(paradas);
+                }
+
                 _context.Add(paradas);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewBag.Rutas = new SelectList(_context.Rutas, "Id", "NombreRuta", paradas.IdRuta);
             return View(paradas);
         }
+
+
 
         // GET: Paradas/Edit/5
         public async Task<IActionResult> Edit(int? id)
