@@ -21,9 +21,13 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
         // GET: Paradas
         public async Task<IActionResult> Index()
         {
-            var cpContext = _context.Parada.Include(r => r.ruta);
-            return View(await _context.Parada.ToListAsync());
+            var cpContext = await _context.Parada
+                .Include(p => p.ruta) 
+                .ToListAsync();
+
+            return View(cpContext);
         }
+
 
         // GET: Paradas/Details/5
         public async Task<IActionResult> Details(int? id)

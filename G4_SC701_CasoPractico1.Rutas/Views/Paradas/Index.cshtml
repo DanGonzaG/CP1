@@ -19,7 +19,7 @@
     <thead>
         <tr>
             <th>
-                 @Html.DisplayNameFor(model => model.ruta.NombreRuta)
+                    @Html.DisplayNameFor(model => model.First().ruta.NombreRuta)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Descripcion)
@@ -30,9 +30,9 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Descripcion)
-                    </td>
+            <td>
+                        @(item.ruta != null ? item.ruta.NombreRuta : "Sin ruta asignada")
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Descripcion)
             </td>
