@@ -3,7 +3,7 @@
     public class Horarios
     {
         public int Id { get; set; }
-        public DateTime Horario { get; set; }
+        public TimeOnly Horario { get; set; }
 
         public int RutaId { get; set; }
 

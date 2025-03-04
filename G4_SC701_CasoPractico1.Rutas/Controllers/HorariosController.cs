@@ -9,23 +9,23 @@ using G4_SC701_CasoPractico1.Rutas.Models;
 
 namespace G4_SC701_CasoPractico1.Rutas.Controllers
 {
-    public class HorarioController : Controller
+    public class HorariosController : Controller
     {
         private readonly CP1Context _context;
 
-        public HorarioController(CP1Context context)
+        public HorariosController(CP1Context context)
         {
             _context = context;
         }
 
-        // GET: Horario
+        // GET: Horarios
         public async Task<IActionResult> Index()
         {
             var cP1Context = _context.Horarios.Include(h => h.ruta);
-            return View(await _context.Horarios.ToListAsync());
+            return View(await cP1Context.ToListAsync());
         }
 
-        // GET: Horario/Details/5
+        // GET: Horarios/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -44,14 +44,14 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
             return View(horarios);
         }
 
-        // GET: Horario/Create
+        // GET: Horarios/Create
         public IActionResult Create()
         {
             ViewData["RutaId"] = new SelectList(_context.Rutas, "Id", "NombreRuta");
             return View();
         }
 
-        // POST: Horario/Create
+        // POST: Horarios/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -60,6 +60,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
         {
             if (ModelState.IsValid)
             {
+                horarios.Horario = TimeOnly.FromDateTime(DateTime.Now.Date.Add(horarios.Horario.ToTimeSpan()));
                 _context.Add(horarios);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -68,7 +69,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
             return View(horarios);
         }
 
-        // GET: Horario/Edit/5
+        // GET: Horarios/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -85,7 +86,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
             return View(horarios);
         }
 
-        // POST: Horario/Edit/5
+        // POST: Horarios/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -117,11 +118,11 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RutaId"] = new SelectList(_context.Rutas, "Id", "Id", horarios.RutaId);
+            ViewData["RutaId"] = new SelectList(_context.Rutas, "Id", "NombreRuta", horarios.RutaId);
             return View(horarios);
         }
 
-        // GET: Horario/Delete/5
+        // GET: Horarios/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -130,6 +131,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
             }
 
             var horarios = await _context.Horarios
+                .Include(h => h.ruta)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (horarios == null)
             {
@@ -139,7 +141,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
             return View(horarios);
         }
 
-        // POST: Horario/Delete/5
+        // POST: Horarios/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
