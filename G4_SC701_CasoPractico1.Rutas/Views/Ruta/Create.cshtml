@@ -1,55 +1,51 @@
 @model G4_SC701_CasoPractico1.Rutas.Models.Ruta
 
 @{
-   
+    ViewData["Title"] = "Crear Ruta";
 }
 
-<!DOCTYPE html>
+<h2>Crear Ruta</h2>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Crear</title>
-</head>
-<body>
-
-<h4>Ruta</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="NombreRuta" class="control-label"></label>
-                <input asp-for="NombreRuta" class="form-control" />
-                <span asp-validation-for="NombreRuta" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Descripcion" class="control-label"></label>
-                <input asp-for="Descripcion" class="form-control" />
-                <span asp-validation-for="Descripcion" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Estado" /> @Html.DisplayNameFor(model => model.Estado)
-                </label>
-            </div>
-
-                <div class="form-group">
-                    <label asp-for="IdUsuarioRegistro" class="control-label"></label>
-                    <input asp-for="IdUsuarioRegistro" class="form-control" />
-                    <span asp-validation-for="IdUsuarioRegistro" class="text-danger"></span>
-                </div>
-            <div class="form-group">
-                <input type="submit" value="Crear" class="btn btn-primary" />
-            </div>
-        </form>
+<form asp-action="Create">
+    <div class="form-group">
+        <label asp-for="NombreRuta" class="control-label"></label>
+        <input asp-for="NombreRuta" class="form-control" />
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Volver a la lista</a>
-</div>
+    <div class="form-group">
+        <label asp-for="Estado" class="control-label"></label>
+        <input asp-for="Estado" type="checkbox" />
+    </div>
 
-</body>
-</html>
+    <div class="form-group">
+        <label asp-for="IdUsuarioRegistro" class="control-label"></label>
+        <select asp-for="IdUsuarioRegistro" class="form-control" asp-items="ViewBag.IdUsuarioRegistro"></select>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Vehículo</label>
+        <select asp-for="IdVehiculo" class="form-control" asp-items="ViewBag.IdVehiculo"></select>
+    </div>
+
+
+
+    <button type="submit" class="btn btn-primary">Crear</button>
+</form>
+
+<a asp-action="Index">Volver a la lista</a>
+
+<!-- Script para actualizar los datos del vehículo al seleccionarlo -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#IdVehiculo").change(function () {
+            var vehiculoId = $(this).val();
+
+            // Llamamos a la API o controlador para obtener los datos del vehículo
+            $.get("/Ruta/GetVehiculoInfo/" + vehiculoId, function (data) {
+                $("#vehiculoModelo").text(data.modelo);
+                $("#vehiculoCapacidad").text(data.capacidadPasajeros);
+            });
+        });
+    });
+</script>

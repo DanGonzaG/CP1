@@ -1,17 +1,11 @@
-@model IEnumerable<G4_SC701_CasoPractico1.Rutas.Models.Paradas>
+﻿@model IEnumerable<G4_SC701_CasoPractico1.Rutas.Models.Paradas>
 
 @{
-    
+    ViewData["Title"] = "Index";
 }
 
-<!DOCTYPE html>
+<h1>Index</h1>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
 <p>
     <a asp-action="Create">Crear nueva parada</a>
 </p>
@@ -19,22 +13,22 @@
     <thead>
         <tr>
             <th>
-                    @Html.DisplayNameFor(model => model.First().ruta.NombreRuta)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Descripcion)
             </th>
-            
+            <th>
+                @Html.DisplayNameFor(model => model.ruta)
+            </th>
+            <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody> 
 @foreach (var item in Model) {
         <tr>
             <td>
-                        @(item.ruta != null ? item.ruta.NombreRuta : "Sin ruta asignada")
+                @Html.DisplayFor(modelItem => item.Descripcion)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Descripcion)
+                @Html.DisplayFor(Model => item.ruta.NombreRuta)                             
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
@@ -45,5 +39,3 @@
 }
     </tbody>
 </table>
-</body>
-</html>

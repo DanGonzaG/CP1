@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,13 +21,10 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
         // GET: Paradas
         public async Task<IActionResult> Index()
         {
-            var cpContext = await _context.Parada
-                .Include(p => p.ruta) 
-                .ToListAsync();
+            var cP1Context = _context.Parada.Include(p => p.ruta).ToListAsync();
 
-            return View(cpContext);
+            return View(await cP1Context);
         }
-
 
         // GET: Paradas/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -38,6 +35,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
             }
 
             var paradas = await _context.Parada
+                .Include(p => p.ruta)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (paradas == null)
             {
@@ -50,40 +48,29 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
         // GET: Paradas/Create
         public IActionResult Create()
         {
-            ViewBag.Rutas = new SelectList(_context.Rutas, "Id", "NombreRuta"); 
+            ViewData["RutaId"] = new SelectList(_context.Rutas, "Id", "NombreRuta");
             return View();
         }
 
-
-        // POST: Paradas/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Descripcion,IdRuta")] Paradas paradas)
+        public async Task<IActionResult> Create([Bind("Id,Descripcion,RutaId")] Paradas paradas)
         {
             if (ModelState.IsValid)
             {
-                // Asignar la relación con Ruta
-                paradas.ruta = await _context.Rutas.FindAsync(paradas.IdRuta);
-                if (paradas.ruta == null)
-                {
-                    ModelState.AddModelError("Id", "Ruta no válida.");
-                    ViewBag.Rutas = new SelectList(_context.Rutas, "Id", "NombreRuta", paradas.IdRuta);
-                    return View(paradas);
-                }
-
                 _context.Add(paradas);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Rutas = new SelectList(_context.Rutas, "Id", "NombreRuta", paradas.IdRuta);
+            // Recargar la lista de rutas en caso de error
+            ViewData["RutaId"] = new SelectList(_context.Rutas, "Id", "NombreRuta", paradas.RutaId);
             return View(paradas);
         }
 
 
 
+        // GET: Paradas/Edit/5
         // GET: Paradas/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -97,6 +84,8 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
             {
                 return NotFound();
             }
+            ViewData["RutaId"] = new SelectList(_context.Rutas, "Id", "NombreRuta", paradas.RutaId);
+
             return View(paradas);
         }
 
@@ -105,7 +94,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Descripcion")] Paradas paradas)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Descripcion,RutaId")] Paradas paradas)
         {
             if (id != paradas.Id)
             {
@@ -132,8 +121,11 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["RutaId"] = new SelectList(_context.Rutas, "Id", "NombreRuta", paradas.RutaId);
+
             return View(paradas);
         }
+
 
         // GET: Paradas/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -144,6 +136,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
             }
 
             var paradas = await _context.Parada
+                .Include(p => p.ruta)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (paradas == null)
             {

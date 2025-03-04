@@ -10,17 +10,19 @@ namespace G4_SC701_CasoPractico1.Rutas.Models
     {
         public int Id { get; set; }
         [Required(ErrorMessage = "El espacio es requerido")]
-        [DisplayName("Nombre de ruta")]
-        
+        [DisplayName("Nombre de ruta")]    
         public string NombreRuta { get; set; }
         [DisplayName("Ruta")]
-        public string Descripcion { get; set; }
         public bool Estado { get; set; }
         [DisplayName("Fecha de Registro")]
+
         public DateTime FechaRegistro { get; set; }
         
         public int IdUsuarioRegistro { get; set; }
         [DisplayName("Nombre usuario de registro")]
+        public int IdVehiculo { get; set; }
+
+        public Vehiculo? vehiculo { get; set; }
         public Usuario? usuario { get; set; }
 
         public IEnumerable<Paradas>? paradas { get; set; }

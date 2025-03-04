@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace G4_SC701_CasoPractico1.Rutas.Migrations
 {
     [DbContext(typeof(CP1Context))]
-    [Migration("20250303053636_dbActualizada")]
-    partial class dbActualizada
+    [Migration("20250304043507_modificacionENRuta")]
+    partial class modificacionENRuta
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,7 +62,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Migrations
                     b.Property<DateTime>("Horario")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("RutaId")
+                    b.Property<int>("RutaId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -84,15 +84,13 @@ namespace G4_SC701_CasoPractico1.Rutas.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("IdRuta")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("rutaId")
+                    b.Property<int?>("RutaId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("rutaId");
+                    b.HasIndex("RutaId");
 
                     b.ToTable("Parada");
                 });
@@ -123,10 +121,6 @@ namespace G4_SC701_CasoPractico1.Rutas.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Descripcion")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("Estado")
                         .HasColumnType("bit");
 
@@ -136,6 +130,9 @@ namespace G4_SC701_CasoPractico1.Rutas.Migrations
                     b.Property<int>("IdUsuarioRegistro")
                         .HasColumnType("int");
 
+                    b.Property<int>("IdVehiculo")
+                        .HasColumnType("int");
+
                     b.Property<string>("NombreRuta")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -143,6 +140,8 @@ namespace G4_SC701_CasoPractico1.Rutas.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("IdUsuarioRegistro");
+
+                    b.HasIndex("IdVehiculo");
 
                     b.ToTable("Rutas");
                 });
@@ -253,17 +252,22 @@ namespace G4_SC701_CasoPractico1.Rutas.Migrations
 
             modelBuilder.Entity("G4_SC701_CasoPractico1.Rutas.Models.Horarios", b =>
                 {
-                    b.HasOne("G4_SC701_CasoPractico1.Rutas.Models.Ruta", null)
+                    b.HasOne("G4_SC701_CasoPractico1.Rutas.Models.Ruta", "ruta")
                         .WithMany("horario")
-                        .HasForeignKey("RutaId");
+                        .HasForeignKey("RutaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ruta");
                 });
 
             modelBuilder.Entity("G4_SC701_CasoPractico1.Rutas.Models.Paradas", b =>
                 {
                     b.HasOne("G4_SC701_CasoPractico1.Rutas.Models.Ruta", "ruta")
                         .WithMany("paradas")
-                        .HasForeignKey("rutaId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("RutaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ruta");
                 });
@@ -276,7 +280,15 @@ namespace G4_SC701_CasoPractico1.Rutas.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("G4_SC701_CasoPractico1.Rutas.Models.Vehiculo", "vehiculo")
+                        .WithMany()
+                        .HasForeignKey("IdVehiculo")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("usuario");
+
+                    b.Navigation("vehiculo");
                 });
 
             modelBuilder.Entity("G4_SC701_CasoPractico1.Rutas.Models.Usuario", b =>

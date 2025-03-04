@@ -79,7 +79,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Models
 
                 ruta.HasOne(r => r.usuario).WithMany().HasForeignKey(r => r.IdUsuarioRegistro).OnDelete(DeleteBehavior.Restrict);
 
-              
+                ruta.HasOne(r => r.vehiculo).WithMany().HasForeignKey(r => r.IdVehiculo).OnDelete(DeleteBehavior.Restrict);
 
                 ruta.HasMany(r => r.paradas).WithOne(p => p.ruta).OnDelete(DeleteBehavior.Cascade);
                 

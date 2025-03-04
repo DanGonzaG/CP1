@@ -66,10 +66,15 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
                                 .Where(u => u.Id == vehiculo.idUsuario)
                                 .Select(u => new { u.Id, u.NombreUsuario, u.RolId, RolNombre = u.Rol.Nombre })
                                 .FirstOrDefaultAsync();
-           
+
+            if (usuario == null || usuario.RolNombre != "Administrador")
+            {
+                ModelState.AddModelError(string.Empty, "No tienes permisos para registrar un vehículo.");
+                ViewData["idUsuario"] = new SelectList(_context.Usuarios, "Id", "NombreUsuario", vehiculo.idUsuario);
+                return View(vehiculo);
+            }
 
 
-            
             if (ModelState.IsValid)
             {
                 vehiculo.FechaRegistro = date;

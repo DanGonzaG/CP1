@@ -14,7 +14,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Models
 
         [Required(ErrorMessage = "Debe seleccionar una ruta")]
         
-        public int IdRuta { get; set; }
+        public int? RutaId { get; set; }
         
         public Ruta? ruta { get; set; }  
     }

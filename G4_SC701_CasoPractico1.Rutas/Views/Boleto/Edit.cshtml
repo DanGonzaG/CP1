@@ -1,11 +1,6 @@
 @model G4_SC701_CasoPractico1.Rutas.Models.Boleto
 
-@{
-    
-}
-
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
@@ -13,38 +8,45 @@
 </head>
 <body>
 
-<h4>Boleto</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="IdRuta" class="control-label"></label>
-                <select asp-for="IdRuta" class="form-control" asp-items="ViewBag.IdRuta"></select>
-                <span asp-validation-for="IdRuta" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdUsuario" class="control-label"></label>
-                <select asp-for="IdUsuario" class="form-control" asp-items="ViewBag.IdUsuario"></select>
-                <span asp-validation-for="IdUsuario" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FechaCompra" class="control-label"></label>
-                <input asp-for="FechaCompra" class="form-control" />
-                <span asp-validation-for="FechaCompra" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+    <h4>Boleto</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Edit">
+                <input type="hidden" asp-for="Id" />
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+                <div class="form-group">
+                    <label asp-for="IdRuta" class="control-label"></label>
+                    <select asp-for="IdRuta" class="form-control" asp-items="ViewBag.IdRuta" id="rutaSelect"></select>
+                    <span asp-validation-for="IdRuta" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Capacidad de Pasajeros:</label>
+                    <input type="text" id="capacidadRuta" class="form-control" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="IdUsuario" class="control-label"></label>
+                    <select asp-for="IdUsuario" class="form-control" asp-items="ViewBag.IdUsuario"></select>
+                    <span asp-validation-for="IdUsuario" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("rutaSelect").addEventListener("change", function () {
+            var rutaId = this.value;
+            fetch(`/Boleto/GetCapacidadRuta/${rutaId}`)
+                .then(response => response.json())
+                .then(data => document.getElementById("capacidadRuta").value = data.capacidad);
+        });
+    </script>
 
 </body>
 </html>

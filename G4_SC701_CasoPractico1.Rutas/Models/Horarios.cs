@@ -5,5 +5,9 @@
         public int Id { get; set; }
         public DateTime Horario { get; set; }
 
+        public int RutaId { get; set; }
+
+        public Ruta? ruta { get; set; }
+
     }
 }

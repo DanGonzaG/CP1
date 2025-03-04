@@ -6,7 +6,7 @@
         public int IdRuta { get; set; }
         public int IdUsuario { get; set; }
         public DateTime FechaCompra { get; set; }
-        public required Ruta ruta { get; set; }
-        public required Usuario usuario { get; set; }
+        public required Ruta? ruta { get; set; }
+        public required Usuario? usuario { get; set; }
     }
 }

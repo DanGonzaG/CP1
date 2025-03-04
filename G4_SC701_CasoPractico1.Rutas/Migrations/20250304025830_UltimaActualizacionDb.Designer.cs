@@ -4,6 +4,7 @@ using G4_SC701_CasoPractico1.Rutas.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace G4_SC701_CasoPractico1.Rutas.Migrations
 {
     [DbContext(typeof(CP1Context))]
-    partial class CP1ContextModelSnapshot : ModelSnapshot
+    [Migration("20250304025830_UltimaActualizacionDb")]
+    partial class UltimaActualizacionDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,13 +84,15 @@ namespace G4_SC701_CasoPractico1.Rutas.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("RutaId")
-                        .IsRequired()
+                    b.Property<int>("IdRuta")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("rutaId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RutaId");
+                    b.HasIndex("rutaId");
 
                     b.ToTable("Parada");
                 });
@@ -262,9 +267,8 @@ namespace G4_SC701_CasoPractico1.Rutas.Migrations
                 {
                     b.HasOne("G4_SC701_CasoPractico1.Rutas.Models.Ruta", "ruta")
                         .WithMany("paradas")
-                        .HasForeignKey("RutaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("rutaId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("ruta");
                 });

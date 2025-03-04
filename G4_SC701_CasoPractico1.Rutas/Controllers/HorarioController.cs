@@ -21,6 +21,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
         // GET: Horario
         public async Task<IActionResult> Index()
         {
+            var cP1Context = _context.Horarios.Include(h => h.ruta);
             return View(await _context.Horarios.ToListAsync());
         }
 
@@ -33,6 +34,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
             }
 
             var horarios = await _context.Horarios
+                .Include(h => h.ruta)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (horarios == null)
             {
@@ -45,6 +47,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
         // GET: Horario/Create
         public IActionResult Create()
         {
+            ViewData["RutaId"] = new SelectList(_context.Rutas, "Id", "NombreRuta");
             return View();
         }
 
@@ -53,7 +56,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Horario")] Horarios horarios)
+        public async Task<IActionResult> Create([Bind("Id,Horario,RutaId")] Horarios horarios)
         {
             if (ModelState.IsValid)
             {
@@ -61,6 +64,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["RutaId"] = new SelectList(_context.Rutas, "Id", "Id", horarios.RutaId);
             return View(horarios);
         }
 
@@ -77,6 +81,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
             {
                 return NotFound();
             }
+            ViewData["RutaId"] = new SelectList(_context.Rutas, "Id", "NombreRuta", horarios.RutaId);
             return View(horarios);
         }
 
@@ -85,7 +90,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Horario")] Horarios horarios)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Horario,RutaId")] Horarios horarios)
         {
             if (id != horarios.Id)
             {
@@ -112,6 +117,7 @@ namespace G4_SC701_CasoPractico1.Rutas.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["RutaId"] = new SelectList(_context.Rutas, "Id", "Id", horarios.RutaId);
             return View(horarios);
         }
 
